@@ -145,11 +145,11 @@ body{
 .pr{background:#E6F7F1;color:#1A7F5A;}
 
 /* Scale */
-.scale-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.scale-wrap{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
 .scale-btn{
-  width:54px;height:54px;border-radius:16px;
+  width:64px;height:64px;border-radius:16px;
   border:2px solid var(--border);background:var(--white);
-  font-family:'Red Hat Display',sans-serif;font-size:16px;font-weight:800;
+  font-family:'Red Hat Display',sans-serif;font-size:20px;font-weight:800;
   cursor:pointer;color:var(--dark);
   transition:all .18s cubic-bezier(.34,1.56,.64,1);
   position:relative;overflow:hidden;
@@ -166,14 +166,18 @@ body{
 .scale-btn.sr{background:#D4F0E8;border-color:#68C9A5;color:#0C6B4A;transform:translateY(-4px);box-shadow:0 8px 20px rgba(12,107,74,.2);}
 .scale-hint{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:1.5rem;}
 
+/* Feedback condicional */
+.fb-wrap{display:none;margin-top:1.25rem;margin-bottom:.5rem;}
+.fb-wrap.visible{display:block;animation:slideUp .3s cubic-bezier(.34,1.2,.64,1) both;}
+
 /* Textarea */
 .c-label{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:8px;}
-textarea{width:100%;min-height:90px;padding:14px 18px;border:2px solid var(--border);border-radius:16px;font-family:'Red Hat Display',sans-serif;font-size:14px;color:var(--dark);background:var(--white);resize:vertical;margin-bottom:2rem;transition:all .2s;}
+textarea{width:100%;min-height:90px;padding:14px 18px;border:2px solid var(--border);border-radius:16px;font-family:'Red Hat Display',sans-serif;font-size:14px;color:var(--dark);background:var(--white);resize:vertical;margin-bottom:.5rem;transition:all .2s;}
 textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(6,102,235,.1);}
 textarea::placeholder{color:#B0B8D0;}
 
 /* Buttons */
-.nav{display:flex;justify-content:flex-end;gap:12px;}
+.nav{display:flex;justify-content:flex-end;gap:12px;margin-top:1.5rem;}
 .btn{padding:14px 28px;border-radius:16px;font-family:'Red Hat Display',sans-serif;font-size:15px;font-weight:700;cursor:pointer;border:2px solid var(--border);background:var(--white);color:var(--dark);transition:all .18s;}
 .btn:hover{background:#F0F4FC;transform:translateY(-1px);}
 .btn-p{background:linear-gradient(180deg,var(--blue3) 0%,var(--blue) 100%);border-color:transparent;color:var(--white);box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 1px 0 #095BD3,0 6px 20px rgba(6,102,235,.3);height:54px;}
@@ -210,7 +214,7 @@ textarea::placeholder{color:#B0B8D0;}
 @media(max-width:600px){
   .card{padding:2rem 1.5rem;}
   .q-text{font-size:17px;}
-  .scale-btn{width:44px;height:44px;font-size:14px;}
+  .scale-btn{width:52px;height:52px;font-size:16px;}
 }
 </style>
 </head>
@@ -237,28 +241,21 @@ textarea::placeholder{color:#B0B8D0;}
 
   <!-- Hero banner -->
   <div style="background:linear-gradient(135deg,#0555D4 0%,#0D80FF 50%,#249EFF 100%);border-radius:20px;padding:2.5rem 2rem;text-align:center;margin-bottom:2.25rem;position:relative;overflow:hidden;">
-    <!-- bg shine -->
     <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,.07);border-radius:50%;"></div>
     <div style="position:absolute;bottom:-60px;left:-30px;width:180px;height:180px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
-
-    <!-- face -->
     <div style="font-size:100px;line-height:1;animation:happy 2.2s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(0,0,0,.15));margin-bottom:.5rem;cursor:default;user-select:none;">😊</div>
-
     <h2 style="font-size:24px;font-weight:900;color:white;margin-bottom:8px;letter-spacing:-.4px;">¡Hola! Tu opinión importa 🙌</h2>
     <p style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.6;max-width:340px;margin:0 auto;">Cuéntanos cómo ha sido tu experiencia con KasHIO. Solo tomará <strong style="color:white;">2 minutos.</strong></p>
-
-    <!-- steps preview -->
     <div style="display:flex;justify-content:center;gap:8px;margin-top:1.5rem;flex-wrap:wrap;">
       <span style="background:rgba(255,255,255,.18);color:white;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;backdrop-filter:blur(8px);">⚡ 5 preguntas</span>
       <span style="background:rgba(255,255,255,.18);color:white;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;backdrop-filter:blur(8px);">⏱ ~2 minutos</span>
     </div>
   </div>
 
-  <!-- Input section -->
   <div class="q-tag">Antes de comenzar</div>
   <h1 class="q-text" style="font-size:21px;">¿Cuál es el nombre de tu empresa?</h1>
   <label class="inp-label" for="empresa">Nombre de empresa <span style="color:#DD2F45">*</span></label>
-  <input class="inp" id="empresa" id="empresa" type="text" placeholder="Ej: Empresa ABC S.A.C." autocomplete="organization" required/>
+  <input class="inp" id="empresa" type="text" placeholder="Ej: Empresa ABC S.A.C." autocomplete="organization" required/>
   <p id="emp-err" style="font-size:12px;color:#DD2F45;font-weight:600;margin-top:-16px;margin-bottom:16px;display:none;">⚠ Este campo es obligatorio para continuar.</p>
 
   <div class="nav">
@@ -268,66 +265,88 @@ textarea::placeholder{color:#B0B8D0;}
   </div>
 </div>
 
-<!-- STEPS 1-5 -->
+<!-- STEP 1 -->
 <div class="step" id="s1">
   <div class="prog-meta"><span>Pregunta 1 de 5</span><span>20%</span></div>
   <div class="prog-track"><div class="prog-fill" style="width:20%"></div></div>
   <div class="q-tag">Gestiones de pago</div>
-  <h1 class="q-text">¿Qué tan sencillo le resulta completar sus gestiones de cobranza o pagos dentro de nuestra plataforma?</h1>
+  <h1 class="q-text">¿Qué tan fácil es administrar sus operaciones de recaudos y pagos con nuestra plataforma?</h1>
   <div class="mood-stage" id="ms1"><div class="face-slot" id="fs1"></div></div>
-  <div class="legend"><span class="pill pd">0–6 Difícil</span><span class="pill pp">7–8 Aceptable</span><span class="pill pr">9–10 Muy sencillo</span></div>
+  <div class="legend"><span class="pill pd">1–2 Difícil</span><span class="pill pp">3 Aceptable</span><span class="pill pr">4–5 Muy fácil</span></div>
   <div class="scale-wrap" id="sc1"></div>
-  <div class="scale-hint"><span>Muy difícil</span><span>Muy sencillo</span></div>
+  <div class="scale-hint"><span>Muy difícil</span><span>Muy fácil</span></div>
+  <div class="fb-wrap" id="fb-wrap1">
+    <p class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400">(opcional)</em></p>
+    <textarea id="fb1" placeholder="Cuéntanos más sobre esta experiencia…"></textarea>
+  </div>
   <div class="nav"><button class="btn" onclick="goTo(0)">← Atrás</button><button class="btn btn-p" id="n1" onclick="goTo(2)" disabled>Siguiente →</button></div>
 </div>
 
+<!-- STEP 2 -->
 <div class="step" id="s2">
   <div class="prog-meta"><span>Pregunta 2 de 5</span><span>40%</span></div>
   <div class="prog-track"><div class="prog-fill" style="width:40%"></div></div>
   <div class="q-tag">Estabilidad del servicio</div>
   <h1 class="q-text">¿Cómo calificaría la continuidad y estabilidad de los servicios de KasHIO para su operación diaria?</h1>
   <div class="mood-stage" id="ms2"><div class="face-slot" id="fs2"></div></div>
-  <div class="legend"><span class="pill pd">0–6 Inestable</span><span class="pill pp">7–8 Aceptable</span><span class="pill pr">9–10 Muy estable</span></div>
+  <div class="legend"><span class="pill pd">1–2 Inestable</span><span class="pill pp">3 Aceptable</span><span class="pill pr">4–5 Muy estable</span></div>
   <div class="scale-wrap" id="sc2"></div>
   <div class="scale-hint"><span>Muy inestable</span><span>Muy estable</span></div>
+  <div class="fb-wrap" id="fb-wrap2">
+    <p class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400">(opcional)</em></p>
+    <textarea id="fb2" placeholder="Cuéntanos más sobre esta experiencia…"></textarea>
+  </div>
   <div class="nav"><button class="btn" onclick="goTo(1)">← Atrás</button><button class="btn btn-p" id="n2" onclick="goTo(3)" disabled>Siguiente →</button></div>
 </div>
 
+<!-- STEP 3 -->
 <div class="step" id="s3">
   <div class="prog-meta"><span>Pregunta 3 de 5</span><span>60%</span></div>
   <div class="prog-track"><div class="prog-fill" style="width:60%"></div></div>
   <div class="q-tag">Atención al cliente</div>
-  <h1 class="q-text">¿Cómo calificarías la atención de nuestro equipo de soporte para la atención de consultas e incidentes?</h1>
+  <h1 class="q-text">¿Cómo calificarías la atención del equipo de soporte?</h1>
   <div class="mood-stage" id="ms3"><div class="face-slot" id="fs3"></div></div>
-  <div class="legend"><span class="pill pd">0–6 Deficiente</span><span class="pill pp">7–8 Buena</span><span class="pill pr">9–10 Excelente</span></div>
+  <div class="legend"><span class="pill pd">1–2 Deficiente</span><span class="pill pp">3 Buena</span><span class="pill pr">4–5 Excelente</span></div>
   <div class="scale-wrap" id="sc3"></div>
   <div class="scale-hint"><span>Muy deficiente</span><span>Excelente</span></div>
+  <div class="fb-wrap" id="fb-wrap3">
+    <p class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400">(opcional)</em></p>
+    <textarea id="fb3" placeholder="Cuéntanos más sobre esta experiencia…"></textarea>
+  </div>
   <div class="nav"><button class="btn" onclick="goTo(2)">← Atrás</button><button class="btn btn-p" id="n3" onclick="goTo(4)" disabled>Siguiente →</button></div>
 </div>
 
+<!-- STEP 4 -->
 <div class="step" id="s4">
   <div class="prog-meta"><span>Pregunta 4 de 5</span><span>80%</span></div>
   <div class="prog-track"><div class="prog-fill" style="width:80%"></div></div>
   <div class="q-tag">Satisfacción general</div>
-  <h1 class="q-text">¿Qué tan satisfecho estás con la calidad general del servicio de KasHIO?</h1>
+  <h1 class="q-text">¿Qué tan satisfecho estás con el servicio general de KasHIO?</h1>
   <div class="mood-stage" id="ms4"><div class="face-slot" id="fs4"></div></div>
-  <div class="legend"><span class="pill pd">0–6 Insatisfecho</span><span class="pill pp">7–8 Satisfecho</span><span class="pill pr">9–10 Muy satisfecho</span></div>
+  <div class="legend"><span class="pill pd">1–2 Insatisfecho</span><span class="pill pp">3 Satisfecho</span><span class="pill pr">4–5 Muy satisfecho</span></div>
   <div class="scale-wrap" id="sc4"></div>
   <div class="scale-hint"><span>Nada satisfecho</span><span>Muy satisfecho</span></div>
+  <div class="fb-wrap" id="fb-wrap4">
+    <p class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400">(opcional)</em></p>
+    <textarea id="fb4" placeholder="Cuéntanos más sobre esta experiencia…"></textarea>
+  </div>
   <div class="nav"><button class="btn" onclick="goTo(3)">← Atrás</button><button class="btn btn-p" id="n4" onclick="goTo(5)" disabled>Siguiente →</button></div>
 </div>
 
+<!-- STEP 5 -->
 <div class="step" id="s5">
   <div class="prog-meta"><span>Pregunta 5 de 5</span><span>100%</span></div>
   <div class="prog-track"><div class="prog-fill" style="width:100%"></div></div>
   <div class="q-tag">Recomendación NPS</div>
   <h1 class="q-text">¿Recomendarías KasHIO a otras empresas o clientes?</h1>
   <div class="mood-stage" id="ms5"><div class="face-slot" id="fs5"></div></div>
-  <div class="legend"><span class="pill pd">0–6 Detractor</span><span class="pill pp">7–8 Pasivo</span><span class="pill pr">9–10 Promotor</span></div>
+  <div class="legend"><span class="pill pd">1–2 Detractor</span><span class="pill pp">3 Pasivo</span><span class="pill pr">4–5 Promotor</span></div>
   <div class="scale-wrap" id="sc5"></div>
-  <div class="scale-hint"><span>No la recomendaría (0)</span><span>La recomendaría sin dudar (10)</span></div>
-  <p class="c-label">Comentario adicional <em style="font-weight:400">(opcional)</em></p>
-  <textarea id="comment" placeholder="Cuéntanos más sobre tu experiencia con KasHIO…"></textarea>
+  <div class="scale-hint"><span>No la recomendaría (1)</span><span>La recomendaría sin dudar (5)</span></div>
+  <div class="fb-wrap" id="fb-wrap5">
+    <p class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400">(opcional)</em></p>
+    <textarea id="fb5" placeholder="Cuéntanos más sobre tu experiencia con KasHIO…"></textarea>
+  </div>
   <div class="nav"><button class="btn" onclick="goTo(4)">← Atrás</button><button class="btn btn-p" id="n5" onclick="enviar()" disabled>Enviar respuestas</button></div>
 </div>
 
@@ -366,19 +385,17 @@ const qLabels=["Gestiones de cobranza","Continuidad del servicio","Atención de 
 const urlParams=new URLSearchParams(window.location.search);
 let clienteParam=urlParams.get("cliente")||"";
 
-/* ── MOOD CONFIG ── */
+/* ── MOOD CONFIG (escala 1-5) ── */
 const MOODS=[
-  {min:0,max:2,  emoji:"😡", label:"Muy insatisfecho", color:"#9E1A1A", bg:"rgba(255,225,220,.95)", cardGlow:"rgba(180,30,30,.2)",   anim:"fa", b1:"radial-gradient(circle,#ffb3a6,#C0392B 70%)", b2:"radial-gradient(circle,#ffd0c8,#E87070 70%)"},
-  {min:3,max:4,  emoji:"😢", label:"Insatisfecho",     color:"#1A4F8A", bg:"rgba(215,235,255,.95)", cardGlow:"rgba(30,80,180,.15)",   anim:"fb", b1:"radial-gradient(circle,#a8c8ff,#2060C0 70%)", b2:"radial-gradient(circle,#c8deff,#5090E0 70%)"},
-  {min:5,max:6,  emoji:"😐", label:"Neutral",           color:"#5A5020", bg:"rgba(255,248,210,.95)", cardGlow:"rgba(130,110,0,.1)",    anim:"fc", b1:"radial-gradient(circle,#e8e0a0,#B8A820 70%)", b2:"radial-gradient(circle,#f0e8b8,#C8B830 70%)"},
-  {min:7,max:8,  emoji:"😊", label:"Satisfecho",        color:"#6A4000", bg:"rgba(255,248,215,.95)", cardGlow:"rgba(180,120,0,.14)",   anim:"fd", b1:"radial-gradient(circle,#ffe0a0,#F0A820 70%)", b2:"radial-gradient(circle,#ffecc8,#FFB830 70%)"},
-  {min:9,max:10, emoji:"😍", label:"¡KasHIO Lover!",    color:"#991040", bg:"rgba(255,220,235,.95)", cardGlow:"rgba(180,20,70,.18)",   anim:"fe", b1:"radial-gradient(circle,#ffb0cc,#CC1040 70%)", b2:"radial-gradient(circle,#ffd0e0,#FF4488 70%)"}
+  {min:1,max:1, emoji:"😡", label:"Muy insatisfecho", color:"#9E1A1A", bg:"rgba(255,225,220,.95)", cardGlow:"rgba(180,30,30,.2)",   anim:"fa", b1:"radial-gradient(circle,#ffb3a6,#C0392B 70%)", b2:"radial-gradient(circle,#ffd0c8,#E87070 70%)"},
+  {min:2,max:2, emoji:"😢", label:"Insatisfecho",     color:"#1A4F8A", bg:"rgba(215,235,255,.95)", cardGlow:"rgba(30,80,180,.15)",   anim:"fb", b1:"radial-gradient(circle,#a8c8ff,#2060C0 70%)", b2:"radial-gradient(circle,#c8deff,#5090E0 70%)"},
+  {min:3,max:3, emoji:"😐", label:"Neutral",           color:"#5A5020", bg:"rgba(255,248,210,.95)", cardGlow:"rgba(130,110,0,.1)",    anim:"fc", b1:"radial-gradient(circle,#e8e0a0,#B8A820 70%)", b2:"radial-gradient(circle,#f0e8b8,#C8B830 70%)"},
+  {min:4,max:4, emoji:"😊", label:"Satisfecho",        color:"#6A4000", bg:"rgba(255,248,215,.95)", cardGlow:"rgba(180,120,0,.14)",   anim:"fd", b1:"radial-gradient(circle,#ffe0a0,#F0A820 70%)", b2:"radial-gradient(circle,#ffecc8,#FFB830 70%)"},
+  {min:5,max:5, emoji:"😍", label:"¡KasHIO Lover!",    color:"#991040", bg:"rgba(255,220,235,.95)", cardGlow:"rgba(180,20,70,.18)",   anim:"fe", b1:"radial-gradient(circle,#ffb0cc,#CC1040 70%)", b2:"radial-gradient(circle,#ffd0e0,#FF4488 70%)"}
 ];
-
 
 function getM(v){return MOODS.find(m=>v>=m.min&&v<=m.max);}
 
-/* Set page mood */
 function setMood(mood){
   document.getElementById("b1").style.background=mood.b1;
   document.getElementById("b2").style.background=mood.b2;
@@ -395,7 +412,7 @@ function showReaction(step,val){
   const fs=document.getElementById("fs"+step);
   if(!fs)return;
   const m=getM(val);
-  const isLove = val>=9;
+  const isLove=val===5;
   fs.innerHTML=`
     <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;">
       <div class="${m.anim}" style="font-size:90px;line-height:1;filter:drop-shadow(0 8px 20px ${m.cardGlow});cursor:default;user-select:none;">${m.emoji}</div>
@@ -415,14 +432,14 @@ function showReaction(step,val){
 }
 
 function cat(v){
-  if(v<=6)return{label:"KasHIO Challenger",cls:"sd",pc:"pd"};
-  if(v<=8)return{label:"Pasivo",cls:"sp",pc:"pp"};
+  if(v<=2)return{label:"KasHIO Challenger",cls:"sd",pc:"pd"};
+  if(v<=3)return{label:"Pasivo",cls:"sp",pc:"pp"};
   return{label:"KasHIO Lover",cls:"sr",pc:"pr"};
 }
 
 function buildScale(id,step){
   const wrap=document.getElementById(id);
-  for(let i=0;i<=10;i++){
+  for(let i=1;i<=5;i++){
     const b=document.createElement("button");
     b.className="scale-btn";b.textContent=i;
     b.setAttribute("aria-label","Calificación "+i);
@@ -432,6 +449,11 @@ function buildScale(id,step){
       answers["q"+step]=i;
       document.getElementById("n"+step).disabled=false;
       showReaction(step,i);
+      const fbWrap=document.getElementById("fb-wrap"+step);
+      if(fbWrap){
+        if(i<=3){fbWrap.style.display="block";fbWrap.classList.add("visible");}
+        else{fbWrap.style.display="none";fbWrap.classList.remove("visible");}
+      }
     };
     wrap.appendChild(b);
   }
@@ -487,7 +509,13 @@ async function enviar(){
   if(answers.q5===undefined)return;
   document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
   document.getElementById("sending").style.display="block";
-  const payload={cliente:clienteParam||"Anónimo",fecha:new Date().toLocaleString("es-PE"),cobranza:answers.q1??"",estabilidad:answers.q2??"",soporte:answers.q3??"",satisfaccion:answers.q4??"",nps:answers.q5,comentario:document.getElementById("comment").value.trim()};
+  const feedbacks=[];
+  for(let i=1;i<=5;i++){
+    const fb=document.getElementById("fb"+i);
+    if(fb&&fb.value.trim())feedbacks.push("P"+i+": "+fb.value.trim());
+  }
+  const comentario=feedbacks.join(" | ");
+  const payload={cliente:clienteParam||"Anónimo",fecha:new Date().toLocaleString("es-PE"),cobranza:answers.q1??"",estabilidad:answers.q2??"",soporte:answers.q3??"",satisfaccion:answers.q4??"",nps:answers.q5,comentario};
   try{const p=new URLSearchParams(payload);await fetch(SHEETS_URL+"?"+p.toString(),{method:"GET",mode:"no-cors"});}catch(e){}
   document.getElementById("sending").style.display="none";
   showThanks();
@@ -501,9 +529,11 @@ function showThanks(){
   for(let i=1;i<=5;i++){
     const v=answers["q"+i];if(v===undefined)continue;
     const c=cat(v);
-    html+=`<div class="sumrow"><span class="sumq">${qLabels[i-1]}</span><span class="sumv">${v}/10 <span class="pill ${c.pc}" style="font-size:11px;padding:2px 8px">${c.label}</span></span></div>`;
+    html+=`<div class="sumrow"><span class="sumq">${qLabels[i-1]}</span><span class="sumv">${v}/5 <span class="pill ${c.pc}" style="font-size:11px;padding:2px 8px">${c.label}</span></span></div>`;
   }
-  const cm=document.getElementById("comment").value.trim();
+  const feedbacks=[];
+  for(let i=1;i<=5;i++){const fb=document.getElementById("fb"+i);if(fb&&fb.value.trim())feedbacks.push("P"+i+": "+fb.value.trim());}
+  const cm=feedbacks.join(" | ");
   if(cm)html+=`<p style="margin-top:12px;font-size:13px;color:var(--muted);font-style:italic">"${cm}"</p>`;
   el.innerHTML=html;
 }

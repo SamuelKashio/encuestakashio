@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard NPS — KasHIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0666EB;--blue2:#0D80FF;--blue3:#249EFF;
+  --navy:#01142f;--dark:#102d5b;--muted:#667085;
+  --bg:#EEF3FC;--white:#fff;--border:#E4E7EC;
+  --green:#1A7F5A;--green-bg:#D4F0E8;
+  --red:#B82020;--red-bg:#FFE0DB;
+  --amber:#7A4F00;--amber-bg:#FFF3D6;
+  --r:16px;
+}
+body{font-family:'Red Hat Display',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:0;left:0;width:220px;height:100vh;
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  padding:1.75rem 1.25rem;
+  z-index:100;
+}
+.sidebar-logo{margin-bottom:2.5rem;}
+.sidebar-logo img{height:30px;filter:brightness(0) invert(1);}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.6);
+  cursor:pointer;transition:all .15s;margin-bottom:4px;
+  text-decoration:none;
+}
+.nav-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9);}
+.nav-item.active{background:rgba(36,159,255,.2);color:#fff;}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;font-size:11px;color:rgba(255,255,255,.3);padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);}
+
+/* ── MAIN ── */
+.main{margin-left:220px;padding:2rem 2.5rem;min-height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
+.page-title{font-size:24px;font-weight:900;color:var(--navy);letter-spacing:-.5px;}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+.refresh-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 18px;border-radius:10px;
+  background:var(--blue);color:#fff;
+  font-family:'Red Hat Display',sans-serif;font-size:13px;font-weight:700;
+  border:none;cursor:pointer;transition:all .15s;
+}
+.refresh-btn:hover{background:#0555D4;transform:translateY(-1px);}
+.refresh-btn.loading{opacity:.7;pointer-events:none;}
+
+/* ── DATE FILTER ── */
+.filter-bar{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:1.75rem;
+  flex-wrap:wrap;
+}
+.filter-pill{
+  padding:7px 16px;border-radius:20px;
+  font-size:12px;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--border);background:var(--white);
+  color:var(--muted);transition:all .15s;
+}
+.filter-pill:hover{border-color:var(--blue);color:var(--blue);}
+.filter-pill.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* ── METRIC CARDS ── */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:1.75rem;}
+.metric-card{
+  background:var(--white);border-radius:var(--r);
+  border:1px solid var(--border);
+  padding:1.5rem 1.5rem 1.25rem;
+  position:relative;overflow:hidden;
+  transition:box-shadow .2s;
+}
+.metric-card:hover{box-shadow:0 4px 20px rgba(6,102,235,.1);}
+.metric-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--r) var(--r) 0 0;
+}
+.mc-blue::before{background:linear-gradient(90deg,var(--blue3),var(--blue));}
+.mc-green::before{background:linear-gradient(90deg,#68C9A5,var(--green));}
+.mc-amber::before{background:linear-gradient(90deg,#FFD580,#F0A820);}
+.mc-red::before{background:linear-gradient(90deg,#FF9090,var(--red));}
+.mc-label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.mc-value{font-size:38px;font-weight:900;line-height:1;letter-spacing:-1px;margin-bottom:6px;}
+.mc-blue .mc-value{color:var(--blue);}
+.mc-green .mc-value{color:var(--green);}
+.mc-amber .mc-value{color:var(--amber);}
+.mc-red .mc-value{color:var(--red);}
+.mc-sub{font-size:12px;color:var(--muted);}
+.mc-badge{
+  display:inline-block;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;margin-top:6px;
+}
+.mc-blue .mc-badge{background:#EEF3FC;color:var(--blue);}
+.mc-green .mc-badge{background:var(--green-bg);color:var(--green);}
+.mc-amber .mc-badge{background:var(--amber-bg);color:var(--amber);}
+.mc-red .mc-badge{background:var(--red-bg);color:var(--red);}
+
+/* ── CHARTS ROW ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:1.25rem;margin-bottom:1.75rem;}
+.chart-card{
+  background:var(--white);border-radius:var(--r);
+  border:1px solid var(--border);padding:1.5rem;
+}
+.chart-title{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.chart-sub{font-size:12px;color:var(--muted);margin-bottom:1.25rem;}
+.chart-wrap{position:relative;}
+
+/* ── NPS GAUGE ── */
+.nps-gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:.5rem 0;}
+.nps-number{font-size:64px;font-weight:900;letter-spacing:-2px;line-height:1;}
+.nps-label{font-size:13px;font-weight:600;margin-top:4px;}
+.nps-scale{display:flex;gap:6px;margin-top:1rem;width:100%;}
+.nps-bar-seg{height:6px;border-radius:3px;flex:1;}
+
+/* ── TABLE ── */
+.table-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;}
+.table-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);
+}
+.table-title{font-size:14px;font-weight:700;color:var(--dark);}
+.table-count{font-size:12px;color:var(--muted);}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{
+  padding:10px 14px;text-align:left;
+  font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--muted);background:#F9FAFB;
+  border-bottom:1px solid var(--border);
+}
+.tbl td{padding:11px 14px;font-size:13px;border-bottom:1px solid #F0F2F8;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#F9FAFB;}
+.category-pill{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.cat-lover{background:var(--green-bg);color:var(--green);}
+.cat-passive{background:var(--amber-bg);color:var(--amber);}
+.cat-challenger{background:var(--red-bg);color:var(--red);}
+.score-dot{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;
+  font-size:13px;font-weight:700;
+}
+.score-high{background:var(--green-bg);color:var(--green);}
+.score-mid{background:var(--amber-bg);color:var(--amber);}
+.score-low{background:var(--red-bg);color:var(--red);}
+
+/* ── EMPTY / LOADING ── */
+.state-wrap{text-align:center;padding:4rem 2rem;}
+.state-emoji{font-size:48px;margin-bottom:1rem;}
+.state-title{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.state-sub{font-size:13px;color:var(--muted);}
+.spinner-sm{
+  width:20px;height:20px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  display:inline-block;animation:spin .7s linear infinite;
+  margin-right:6px;vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn .4s ease both;}
+
+@media(max-width:900px){
+  .sidebar{display:none;}
+  .main{margin-left:0;padding:1.25rem;}
+  .metrics-grid{grid-template-columns:repeat(2,1fr);}
+  .charts-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://kashio.net/wp-content/uploads/2025/05/kashio-logo.svg" alt="KasHIO"/>
+  </div>
+  <a class="nav-item active" href="#">
+    <span class="nav-icon">📊</span> Dashboard NPS
+  </a>
+  <a class="nav-item" href="index.html" target="_blank">
+    <span class="nav-icon">📝</span> Ver encuesta
+  </a>
+  <div class="sidebar-footer">KasHIO &copy; 2026</div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">Dashboard NPS</div>
+      <div class="page-sub" id="lastUpdated">Cargando datos…</div>
+    </div>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
+      <span id="refreshIcon">↻</span> Actualizar
+    </button>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar" id="filterBar">
+    <span style="font-size:12px;font-weight:700;color:var(--muted);">Período:</span>
+    <button class="filter-pill" onclick="setFilter('7')" id="f7">Últimos 7 días</button>
+    <button class="filter-pill" onclick="setFilter('30')" id="f30">Últimos 30 días</button>
+    <button class="filter-pill active" onclick="setFilter('all')" id="fall">Todos</button>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-grid animate-in" id="metricsGrid">
+    <div class="metric-card mc-blue">
+      <div class="mc-label">Score NPS</div>
+      <div class="mc-value" id="npsScore">—</div>
+      <div class="mc-sub">de -100 a 100</div>
+      <div class="mc-badge" id="npsBadge">—</div>
+    </div>
+    <div class="metric-card mc-green">
+      <div class="mc-label">Total respuestas</div>
+      <div class="mc-value" id="totalResp">—</div>
+      <div class="mc-sub" id="totalSub">—</div>
+      <div class="mc-badge" id="totalBadge">—</div>
+    </div>
+    <div class="metric-card mc-green" style="--green:#0C6B4A">
+      <div class="mc-label">KasHIO Lovers 😍</div>
+      <div class="mc-value" id="loversCount">—</div>
+      <div class="mc-sub" id="loversPct">NPS 9-10</div>
+      <div class="mc-badge" id="loversBadge">—</div>
+    </div>
+    <div class="metric-card mc-red">
+      <div class="mc-label">KasHIO Challengers 😡</div>
+      <div class="mc-value" id="challCount">—</div>
+      <div class="mc-sub" id="challPct">NPS 0-6</div>
+      <div class="mc-badge" id="challBadge">—</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid animate-in">
+    <div class="chart-card">
+      <div class="chart-title">Distribución NPS</div>
+      <div class="chart-sub">Categorías de respondentes</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="donutChart"></canvas>
+      </div>
+      <div class="nps-scale" id="npsScale"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Promedio por pregunta</div>
+      <div class="chart-sub">Calificación promedio 0–10 por categoría</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card animate-in">
+    <div class="table-header">
+      <span class="table-title">Respuestas recientes</span>
+      <span class="table-count" id="tableCount">—</span>
+    </div>
+    <div id="tableWrap">
+      <div class="state-wrap">
+        <div class="state-emoji">⏳</div>
+        <div class="state-title">Cargando respuestas…</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwv0cgeSAnaII2XSU7A8C5FlXa4e16fe5lwpB0_Yh_wr_NTGah49k4D64dgguBcYvQ4Rg/exec";
+
+let allRows = [];
+let activeFilter = "all";
+let donutChart, barChart;
+
+// ── LOAD DATA ───────────────────────────────────────────────
+async function loadData() {
+  const btn = document.getElementById("refreshBtn");
+  const icon = document.getElementById("refreshIcon");
+  btn.classList.add("loading");
+  icon.innerHTML = '<span class="spinner-sm"></span>';
+
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getData");
+    const json = await res.json();
+    if (json.status === "ok") {
+      allRows = json.rows;
+      document.getElementById("lastUpdated").textContent =
+        "Última actualización: " + new Date().toLocaleString("es-PE");
+      renderAll();
+    }
+  } catch(e) {
+    document.getElementById("lastUpdated").textContent = "Error al cargar datos. Reintenta.";
+  }
+
+  btn.classList.remove("loading");
+  icon.textContent = "↻";
+}
+
+// ── FILTER ──────────────────────────────────────────────────
+function setFilter(f) {
+  activeFilter = f;
+  ["7","30","all"].forEach(x => {
+    document.getElementById("f"+x).classList.toggle("active", x===f);
+  });
+  renderAll();
+}
+
+function getFilteredRows() {
+  if (activeFilter === "all") return allRows;
+  const days = parseInt(activeFilter);
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  return allRows.filter(r => {
+    const d = new Date(r["Fecha"]);
+    return !isNaN(d) && d >= cutoff;
+  });
+}
+
+// ── HELPERS ─────────────────────────────────────────────────
+function parseScore(v) {
+  const n = parseInt(v);
+  return isNaN(n) ? null : n;
+}
+
+function getCat(row) {
+  const nps = parseScore(row["P5 - NPS (Recomendación)"]);
+  if (nps === null) return null;
+  if (nps <= 6) return "challenger";
+  if (nps <= 8) return "passive";
+  return "lover";
+}
+
+function getLabel(cat) {
+  if (cat === "lover") return {text:"KasHIO Lover 😍", cls:"cat-lover"};
+  if (cat === "passive") return {text:"Pasivo 😐", cls:"cat-passive"};
+  return {text:"KasHIO Challenger 😡", cls:"cat-challenger"};
+}
+
+function scoreClass(n) {
+  if (n === null) return "";
+  if (n >= 8) return "score-high";
+  if (n >= 5) return "score-mid";
+  return "score-low";
+}
+
+// ── RENDER ALL ──────────────────────────────────────────────
+function renderAll() {
+  const rows = getFilteredRows().filter(r => parseScore(r["P5 - NPS (Recomendación)"]) !== null);
+
+  const lovers    = rows.filter(r => getCat(r) === "lover").length;
+  const passives  = rows.filter(r => getCat(r) === "passive").length;
+  const challengers = rows.filter(r => getCat(r) === "challenger").length;
+  const total = rows.length;
+
+  const nps = total > 0
+    ? Math.round((lovers / total - challengers / total) * 100)
+    : null;
+
+  // Metrics
+  document.getElementById("npsScore").textContent = nps !== null ? nps : "—";
+  document.getElementById("npsBadge").textContent =
+    nps === null ? "Sin datos" :
+    nps >= 70 ? "🏆 Excelente" :
+    nps >= 50 ? "✅ Muy bueno" :
+    nps >= 30 ? "👍 Bueno" :
+    nps >= 0  ? "⚠️ Mejorable" : "🚨 Crítico";
+
+  document.getElementById("totalResp").textContent = total;
+  document.getElementById("totalSub").textContent = `${passives} pasivos`;
+  document.getElementById("totalBadge").textContent = total + " respuestas válidas";
+
+  document.getElementById("loversCount").textContent = lovers;
+  document.getElementById("loversPct").textContent =
+    total > 0 ? Math.round(lovers/total*100) + "% del total" : "NPS 9-10";
+  document.getElementById("loversBadge").textContent = lovers + " respondentes";
+
+  document.getElementById("challCount").textContent = challengers;
+  document.getElementById("challPct").textContent =
+    total > 0 ? Math.round(challengers/total*100) + "% del total" : "NPS 0-6";
+  document.getElementById("challBadge").textContent = challengers + " respondentes";
+
+  // NPS color
+  const npsEl = document.getElementById("npsScore");
+  npsEl.style.color = nps === null ? "#667085" :
+    nps >= 50 ? "#1A7F5A" : nps >= 0 ? "#F0A820" : "#B82020";
+
+  renderDonut(lovers, passives, challengers);
+  renderBar(rows);
+  renderTable(getFilteredRows());
+}
+
+// ── DONUT CHART ─────────────────────────────────────────────
+function renderDonut(lovers, passives, challengers) {
+  const ctx = document.getElementById("donutChart").getContext("2d");
+  if (donutChart) donutChart.destroy();
+  donutChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["KasHIO Lovers 😍", "Pasivos 😐", "Challengers 😡"],
+      datasets: [{
+        data: [lovers, passives, challengers],
+        backgroundColor: ["#20C87A","#F0A820","#E85050"],
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      cutout: "68%",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            font: {family:"Red Hat Display", size:12, weight:"700"},
+            color:"#667085", padding:16, usePointStyle:true, pointStyleWidth:10
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+              const pct = total > 0 ? Math.round(ctx.raw/total*100) : 0;
+              return ` ${ctx.raw} respuestas (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// ── BAR CHART ───────────────────────────────────────────────
+function renderBar(rows) {
+  const ctx = document.getElementById("barChart").getContext("2d");
+  if (barChart) barChart.destroy();
+
+  const qKeys = [
+    "P1 - Gestiones de cobranza",
+    "P2 - Continuidad del servicio",
+    "P3 - Atención de soporte",
+    "P4 - Satisfacción general",
+    "P5 - NPS (Recomendación)"
+  ];
+  const qLabels = ["Cobranza","Continuidad","Soporte","Satisfacción","NPS"];
+
+  const avgs = qKeys.map(k => {
+    const vals = rows.map(r => parseScore(r[k])).filter(v => v !== null);
+    return vals.length ? parseFloat((vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)) : 0;
+  });
+
+  const colors = avgs.map(v =>
+    v >= 8 ? "#20C87A" : v >= 5 ? "#F0A820" : "#E85050"
+  );
+
+  barChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: qLabels,
+      datasets: [{
+        label: "Promedio",
+        data: avgs,
+        backgroundColor: colors,
+        borderRadius: 8,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          min: 0, max: 10,
+          ticks: {
+            font: {family:"Red Hat Display", size:11},
+            color:"#667085", stepSize:2
+          },
+          grid: {color:"rgba(0,0,0,.05)"}
+        },
+        x: {
+          ticks: {font: {family:"Red Hat Display", size:12, weight:"700"}, color:"#102d5b"},
+          grid: {display:false}
+        }
+      },
+      plugins: {
+        legend: {display:false},
+        tooltip: {
+          callbacks: {
+            label: ctx => ` Promedio: ${ctx.raw} / 10`
+          }
+        }
+      }
+    }
+  });
+}
+
+// ── TABLE ───────────────────────────────────────────────────
+function renderTable(rows) {
+  const valid = [...rows].filter(r => r["Cliente"]).reverse();
+  document.getElementById("tableCount").textContent = valid.length + " registros";
+
+  if (valid.length === 0) {
+    document.getElementById("tableWrap").innerHTML = `
+      <div class="state-wrap">
+        <div class="state-emoji">📭</div>
+        <div class="state-title">Sin respuestas en este período</div>
+        <div class="state-sub">Seleccioná otro filtro o esperá nuevas respuestas</div>
+      </div>`;
+    return;
+  }
+
+  const scoreCell = (v) => {
+    const n = parseScore(v);
+    if (n === null) return '<span style="color:#B0B8D0">—</span>';
+    return `<span class="score-dot ${scoreClass(n)}">${n}</span>`;
+  };
+
+  const rows_html = valid.slice(0,50).map(r => {
+    const cat = getCat(r);
+    const lbl = cat ? getLabel(cat) : null;
+    const catCell = lbl
+      ? `<span class="category-pill ${lbl.cls}">${lbl.text}</span>`
+      : '<span style="color:#B0B8D0">—</span>';
+    const comment = r["Comentario"] || "";
+    return `<tr>
+      <td style="white-space:nowrap;color:var(--muted);font-size:12px">${r["Fecha"]||"—"}</td>
+      <td style="font-weight:700">${r["Cliente"]||"—"}</td>
+      <td style="text-align:center">${scoreCell(r["P1 - Gestiones de cobranza"])}</td>
+      <td style="text-align:center">${scoreCell(r["P2 - Continuidad del servicio"])}</td>
+      <td style="text-align:center">${scoreCell(r["P3 - Atención de soporte"])}</td>
+      <td style="text-align:center">${scoreCell(r["P4 - Satisfacción general"])}</td>
+      <td style="text-align:center">${scoreCell(r["P5 - NPS (Recomendación)"])}</td>
+      <td>${catCell}</td>
+      <td style="color:var(--muted);font-size:12px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${comment}</td>
+    </tr>`;
+  }).join("");
+
+  document.getElementById("tableWrap").innerHTML = `
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr>
+          <th>Fecha</th><th>Cliente</th>
+          <th style="text-align:center">P1</th>
+          <th style="text-align:center">P2</th>
+          <th style="text-align:center">P3</th>
+          <th style="text-align:center">P4</th>
+          <th style="text-align:center">NPS</th>
+          <th>Categoría</th>
+          <th>Comentario</th>
+        </tr></thead>
+        <tbody>${rows_html}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── INIT ────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>

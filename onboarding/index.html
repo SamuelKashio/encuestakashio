@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Encuesta de Onboarding — KasHIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#0666EB;--blue2:#0D80FF;--blue3:#249EFF;--dark:#102d5b;--muted:#667085;--white:#fff;--border:#D0D5DD;--card-glow:rgba(6,102,235,.12);}
+body{font-family:'Red Hat Display',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 1.25rem 5rem;position:relative;overflow-x:hidden;background:linear-gradient(160deg,#eef4fd 0%,#f0f5fe 60%,#e8f0fb 100%);}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.25;}
+.b1{width:520px;height:520px;background:radial-gradient(circle,#b3d4ff,#0666EB 70%);top:-180px;left:-180px;animation:bdrift 18s ease-in-out infinite alternate;}
+.b2{width:360px;height:360px;background:radial-gradient(circle,#c8deff,#3A7FD0 70%);bottom:60px;right:-80px;animation:bdrift 22s ease-in-out infinite alternate-reverse;}
+.b3{width:220px;height:220px;background:radial-gradient(circle,#dce9ff,#6A9FE0 70%);top:45%;left:5%;animation:bdrift 14s ease-in-out infinite alternate;}
+@keyframes bdrift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(32px,20px) scale(1.08)}}
+.dots{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(6,102,235,.07) 1.5px,transparent 1.5px);background-size:40px 40px;}
+.topbar{width:100%;max-width:780px;display:flex;align-items:center;justify-content:space-between;padding:1.75rem 0 2rem;position:relative;z-index:10;}
+.topbar-right{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px;}
+.card{background:#fff;border-radius:24px;box-shadow:0 4px 40px var(--card-glow),0 1px 8px rgba(0,0,0,.04);border:1px solid rgba(6,102,235,.08);padding:3rem 3.25rem;width:100%;max-width:780px;position:relative;z-index:10;animation:slideUp .45s cubic-bezier(.22,1,.36,1) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.prog-meta{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.prog-track{height:4px;background:#EBF0F8;border-radius:4px;overflow:hidden;margin-bottom:2.5rem;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue3),var(--blue));border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.block-badge{display:inline-flex;align-items:center;background:#F0F6FF;border:1px solid #D4E5FF;border-radius:8px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.4px;text-transform:uppercase;margin-bottom:20px;}
+.q-num{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#9AAABB;margin-bottom:7px;}
+.q-text{font-size:18px;font-weight:700;line-height:1.55;color:var(--dark);margin-bottom:1.25rem;}
+.inp-label{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px;display:block;}
+.inp{width:100%;padding:15px 18px;border:1.5px solid var(--border);border-radius:12px;font-family:'Red Hat Display',sans-serif;font-size:15px;color:var(--dark);background:var(--white);transition:all .2s;margin-bottom:1.5rem;}
+.inp:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(6,102,235,.1);}
+.inp::placeholder{color:#B8C0D0;}
+.prod-wrap{display:flex;gap:10px;margin-bottom:1.75rem;flex-wrap:wrap;}
+.prod-btn{flex:1;min-width:110px;padding:14px 12px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);font-family:'Red Hat Display',sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;text-align:center;transition:all .2s;line-height:1.4;}
+.prod-btn:hover{border-color:var(--blue);color:var(--blue);background:#F0F6FF;}
+.prod-btn.selected{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(6,102,235,.25);}
+.prod-btn .prod-sub{font-size:11px;font-weight:500;opacity:.75;display:block;}
+.prod-btn.selected .prod-sub{opacity:.85;}
+.legend{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.pd{background:#FDF0EF;color:#992B2B;}
+.pp{background:#FEF9EC;color:#7A5500;}
+.pr{background:#EDF7F2;color:#0E6B42;}
+.scale-wrap{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px;}
+.scale-btn{flex:0 0 calc(20% - 5.6px);height:52px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-family:'Red Hat Display',sans-serif;font-size:17px;font-weight:800;cursor:pointer;color:var(--dark);display:flex;align-items:center;justify-content:center;transition:all .15s ease;}
+.scale-btn:hover{border-color:var(--blue);color:var(--blue);background:#F0F6FF;transform:translateY(-1px);}
+.scale-btn.sd{background:#FDF0EF;border-color:#D97070;color:#8B2222;}
+.scale-btn.sp{background:#FEF9EC;border-color:#D4A840;color:#7A5500;}
+.scale-btn.sr{background:#EDF7F2;border-color:#4CAF80;color:#0E6B42;}
+.scale-hint{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#9AAABB;margin-bottom:.75rem;}
+.sel-label{font-size:12px;font-weight:600;color:var(--muted);min-height:18px;margin-bottom:.5rem;}
+.sel-label.rated{color:var(--dark);}
+.fb-wrap{display:none;margin-top:.75rem;}
+.fb-wrap.visible{display:block;animation:slideUp .25s ease both;}
+.c-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;}
+textarea{width:100%;min-height:76px;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'Red Hat Display',sans-serif;font-size:14px;color:var(--dark);background:var(--white);resize:vertical;transition:all .2s;}
+textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(6,102,235,.08);}
+textarea::placeholder{color:#C0C8D8;}
+.q-block{margin-bottom:1.75rem;}
+.q-divider{height:1px;background:#EBF0F8;margin:1.75rem 0;}
+.nav{display:flex;justify-content:flex-end;gap:10px;margin-top:2rem;}
+.btn{padding:13px 26px;border-radius:12px;font-family:'Red Hat Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--dark);transition:all .15s;}
+.btn:hover{background:#F4F7FD;border-color:#C8D4E8;}
+.btn-p{background:var(--blue);border-color:transparent;color:#fff;box-shadow:0 4px 16px rgba(6,102,235,.28);}
+.btn-p:hover{background:#0555D4;transform:translateY(-1px);}
+.btn-p:disabled,.btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none;}
+.step{display:none;}
+.step.active{display:block;animation:slideUp .35s cubic-bezier(.22,1,.36,1) both;}
+.sending{text-align:center;padding:4rem 0;display:none;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:40px;height:40px;border:3px solid #E8EDF5;border-top-color:var(--blue);border-radius:50%;margin:0 auto 1.25rem;animation:spin .65s linear infinite;}
+.ty{text-align:center;padding:1.5rem 0 .5rem;}
+.ty-icon{width:72px;height:72px;background:linear-gradient(135deg,#EDF7F2,#D4F0E4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 4px 20px rgba(14,107,66,.12);}
+.ty-title{font-size:26px;font-weight:900;color:var(--dark);margin-bottom:8px;letter-spacing:-.4px;}
+.ty-sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:380px;margin-left:auto;margin-right:auto;}
+.footer{margin-top:2rem;font-size:11px;color:#A8B4C8;text-align:center;position:relative;z-index:10;letter-spacing:.3px;}
+@media(max-width:600px){.card{padding:2rem 1.5rem;}.q-text{font-size:16px;}.scale-btn{height:46px;font-size:15px;}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="dots"></div>
+<header class="topbar">
+  <img src="https://kashio.net/wp-content/uploads/2025/05/kashio-logo.svg" alt="KasHIO" style="height:34px;width:auto;"/>
+  <span class="topbar-right">Encuesta de satisfacción &middot; 2026</span>
+</header>
+<main style="width:100%;display:flex;justify-content:center;position:relative;z-index:10;">
+<div class="card">
+
+<!-- STEP 0: Intro -->
+<div class="step active" id="s0">
+  <div style="background:linear-gradient(135deg,#0452C8 0%,#0666EB 55%,#1A85FF 100%);border-radius:16px;padding:2.25rem 2rem;margin-bottom:2.5rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:rgba(255,255,255,.06);border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-70px;left:-40px;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+    <div style="width:52px;height:52px;background:rgba(255,255,255,.15);border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    </div>
+    <h2 style="font-size:21px;font-weight:900;color:white;margin-bottom:8px;letter-spacing:-.3px;line-height:1.3;">Encuesta de onboarding</h2>
+    <p style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.65;max-width:360px;">Tu feedback sobre el proceso de integración nos permite mejorar continuamente. El proceso toma aproximadamente <strong style="color:white;">7 minutos.</strong></p>
+    <div style="display:flex;gap:8px;margin-top:1.5rem;flex-wrap:wrap;">
+      <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.95);font-size:11px;font-weight:700;padding:5px 13px;border-radius:6px;">7 bloques</span>
+      <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.95);font-size:11px;font-weight:700;padding:5px 13px;border-radius:6px;">Escala 1 a 10</span>
+    </div>
+  </div>
+
+  <label class="inp-label" for="empresa">Nombre de empresa <span style="color:#CC2A3A">*</span></label>
+  <input class="inp" id="empresa" type="text" placeholder="Ej: Empresa ABC S.A.C." autocomplete="organization"/>
+  <p id="emp-err" style="font-size:12px;color:#CC2A3A;font-weight:600;margin-top:-12px;margin-bottom:16px;display:none;">Este campo es obligatorio.</p>
+
+  <label class="inp-label">¿Qué producto(s) de KasHIO integraste? <span style="color:#CC2A3A">*</span></label>
+  <div class="prod-wrap">
+    <button class="prod-btn" id="pb-payin" onclick="selProd('payin')">Payin<span class="prod-sub">Recaudos</span></button>
+    <button class="prod-btn" id="pb-payout" onclick="selProd('payout')">Payout<span class="prod-sub">Dispersión</span></button>
+    <button class="prod-btn" id="pb-ambos" onclick="selProd('ambos')">Ambos<span class="prod-sub">Payin + Payout</span></button>
+  </div>
+
+  <div class="nav">
+    <button class="btn btn-p" id="n0" onclick="goTo(1)" disabled style="width:100%;font-size:15px;height:54px;">Comenzar encuesta &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 1: Bloque 1 - Corporativo -->
+<div class="step" id="s1">
+  <div class="prog-meta" id="pm1"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf1"></div></div>
+  <div class="block-badge">Bloque 1 &mdash; Corporativo</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías nuestra propuesta de valor comercial?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Bajo</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Alto</span></div>
+    <div class="scale-wrap" id="sc-q1"></div>
+    <div class="scale-hint"><span>Muy bajo</span><span>Excelente</span></div>
+    <div class="sel-label" id="sl-q1"></div>
+    <div class="fb-wrap" id="fb-q1">
+      <label class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q1" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 2 &mdash; NPS</div>
+    <h2 class="q-text">¿Qué tan probable es que recomiendes KasHIO a otra empresa?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Detractor</span><span class="pill pp">6&ndash;7 &nbsp;Pasivo</span><span class="pill pr">8&ndash;10 &nbsp;Promotor</span></div>
+    <div class="scale-wrap" id="sc-q2"></div>
+    <div class="scale-hint"><span>Muy improbable</span><span>Muy probable</span></div>
+    <div class="sel-label" id="sl-q2"></div>
+    <div class="fb-wrap" id="fb-q2">
+      <label class="c-label">¿Cuál es la razón principal de tu calificación? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q2" placeholder="Nos ayuda a entender tu experiencia..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(0)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n1" onclick="goTo(2)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 2: Bloque 2 - Equipo Comercial -->
+<div class="step" id="s2">
+  <div class="prog-meta" id="pm2"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf2"></div></div>
+  <div class="block-badge">Bloque 2 &mdash; Equipo Comercial</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías la calidad de la atención del equipo comercial?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Deficiente</span><span class="pill pp">6&ndash;7 &nbsp;Buena</span><span class="pill pr">8&ndash;10 &nbsp;Excelente</span></div>
+    <div class="scale-wrap" id="sc-q4"></div>
+    <div class="scale-hint"><span>Muy deficiente</span><span>Excelente</span></div>
+    <div class="sel-label" id="sl-q4"></div>
+    <div class="fb-wrap" id="fb-q4">
+      <label class="c-label">¿Qué podríamos mejorar? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q4" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 2</div>
+    <h2 class="q-text">¿Sientes que el equipo comercial entiende las necesidades de tu negocio?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;No me entienden</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Me entienden muy bien</span></div>
+    <div class="scale-wrap" id="sc-q5"></div>
+    <div class="scale-hint"><span>No me entienden</span><span>Me entienden perfectamente</span></div>
+    <div class="sel-label" id="sl-q5"></div>
+    <div class="fb-wrap" id="fb-q5">
+      <label class="c-label">¿Qué podría mejorar el equipo comercial? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q5" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(1)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n2" onclick="goTo(3)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 3: Bloque 3 - Customer Support -->
+<div class="step" id="s3">
+  <div class="prog-meta" id="pm3"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf3"></div></div>
+  <div class="block-badge">Bloque 3 &mdash; Customer Support</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 4</div>
+    <h2 class="q-text">¿Cómo calificarías la velocidad de respuesta del equipo de soporte?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Lenta</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Muy rápida</span></div>
+    <div class="scale-wrap" id="sc-q7"></div>
+    <div class="scale-hint"><span>Muy lenta</span><span>Muy rápida</span></div>
+    <div class="sel-label" id="sl-q7"></div>
+    <div class="fb-wrap" id="fb-q7">
+      <label class="c-label">¿Qué mejorarías? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q7" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 4</div>
+    <h2 class="q-text">¿Cómo calificarías la calidad de las soluciones que brinda el equipo de soporte?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Deficiente</span><span class="pill pp">6&ndash;7 &nbsp;Buena</span><span class="pill pr">8&ndash;10 &nbsp;Excelente</span></div>
+    <div class="scale-wrap" id="sc-q8"></div>
+    <div class="scale-hint"><span>Muy deficiente</span><span>Excelente</span></div>
+    <div class="sel-label" id="sl-q8"></div>
+    <div class="fb-wrap" id="fb-q8">
+      <label class="c-label">¿Qué mejorarías? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q8" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 3 de 4</div>
+    <h2 class="q-text">¿La comunicación del equipo de soporte fue clara y comprensible?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Poco clara</span><span class="pill pp">6&ndash;7 &nbsp;Clara</span><span class="pill pr">8&ndash;10 &nbsp;Muy clara</span></div>
+    <div class="scale-wrap" id="sc-q9"></div>
+    <div class="scale-hint"><span>Nada clara</span><span>Muy clara</span></div>
+    <div class="sel-label" id="sl-q9"></div>
+    <div class="fb-wrap" id="fb-q9">
+      <label class="c-label">¿Qué mejorarías? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q9" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 4 de 4</div>
+    <h2 class="q-text">¿Las respuestas del equipo de soporte son consistentes y confiables?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Inconsistente</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Muy consistente</span></div>
+    <div class="scale-wrap" id="sc-q10"></div>
+    <div class="scale-hint"><span>Muy inconsistente</span><span>Muy consistente</span></div>
+    <div class="sel-label" id="sl-q10"></div>
+    <div class="fb-wrap" id="fb-q10">
+      <label class="c-label">¿Qué podría mejorar el equipo de soporte? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q10b" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(2)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n3" onclick="goTo(4)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 4: Bloque 4 - Onboarding -->
+<div class="step" id="s4">
+  <div class="prog-meta" id="pm4"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf4"></div></div>
+  <div class="block-badge">Bloque 4 &mdash; Proceso de Onboarding</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 4</div>
+    <h2 class="q-text">¿Qué tan fácil fue el proceso de integración con KasHIO?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Difícil</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Muy fácil</span></div>
+    <div class="scale-wrap" id="sc-q11"></div>
+    <div class="scale-hint"><span>Muy difícil</span><span>Muy fácil</span></div>
+    <div class="sel-label" id="sl-q11"></div>
+    <div class="fb-wrap" id="fb-q11">
+      <label class="c-label">¿Qué mejorarías del proceso? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q11" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 4</div>
+    <h2 class="q-text">¿Cómo calificarías el acompañamiento durante el proceso de onboarding?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Deficiente</span><span class="pill pp">6&ndash;7 &nbsp;Bueno</span><span class="pill pr">8&ndash;10 &nbsp;Excelente</span></div>
+    <div class="scale-wrap" id="sc-q12"></div>
+    <div class="scale-hint"><span>Muy deficiente</span><span>Excelente</span></div>
+    <div class="sel-label" id="sl-q12"></div>
+    <div class="fb-wrap" id="fb-q12">
+      <label class="c-label">¿Qué mejorarías del acompañamiento? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q12" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 3 de 4</div>
+    <h2 class="q-text">¿La documentación proporcionada fue suficiente y clara?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Insuficiente</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Muy completa</span></div>
+    <div class="scale-wrap" id="sc-q13"></div>
+    <div class="scale-hint"><span>Muy insuficiente</span><span>Muy completa</span></div>
+    <div class="sel-label" id="sl-q13"></div>
+    <div class="fb-wrap" id="fb-q13">
+      <label class="c-label">¿Qué mejorarías de la documentación? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q13" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 4 de 4</div>
+    <h2 class="q-text">¿El tiempo del proceso de onboarding fue el adecuado?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Demasiado largo</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Muy adecuado</span></div>
+    <div class="scale-wrap" id="sc-q14"></div>
+    <div class="scale-hint"><span>Demasiado largo</span><span>Muy adecuado</span></div>
+    <div class="sel-label" id="sl-q14"></div>
+    <div class="fb-wrap" id="fb-q14">
+      <label class="c-label">¿Qué podría mejorar del proceso de onboarding? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q15" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(3)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n4" onclick="goNext(4)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 5: Bloque Payin -->
+<div class="step" id="s5">
+  <div class="prog-meta" id="pm5"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf5"></div></div>
+  <div class="block-badge">Payin &mdash; Recaudos</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías tu satisfacción con el servicio de recaudo (Payin)?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Bajo</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Alto</span></div>
+    <div class="scale-wrap" id="sc-q16"></div>
+    <div class="scale-hint"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+    <div class="sel-label" id="sl-q16"></div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías la eficiencia en la conciliación de tus recaudos?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Baja</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Alta</span></div>
+    <div class="scale-wrap" id="sc-q17"></div>
+    <div class="scale-hint"><span>Muy ineficiente</span><span>Muy eficiente</span></div>
+    <div class="sel-label" id="sl-q17"></div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(4)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n5" onclick="goNext(5)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 6: Bloque Payout -->
+<div class="step" id="s6">
+  <div class="prog-meta" id="pm6"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf6"></div></div>
+  <div class="block-badge">Payout &mdash; Dispersión</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías tu satisfacción con el servicio de dispersión (Payout)?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Bajo</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Alto</span></div>
+    <div class="scale-wrap" id="sc-q18"></div>
+    <div class="scale-hint"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+    <div class="sel-label" id="sl-q18"></div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías la confiabilidad en la entrega de los pagos?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Baja</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Alta</span></div>
+    <div class="scale-wrap" id="sc-q19"></div>
+    <div class="scale-hint"><span>Muy baja</span><span>Muy alta</span></div>
+    <div class="sel-label" id="sl-q19"></div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goPrev(6)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n6" onclick="goTo(7)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 7: Plataforma -->
+<div class="step" id="s7">
+  <div class="prog-meta" id="pm7"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf7"></div></div>
+  <div class="block-badge">Plataforma</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 2</div>
+    <h2 class="q-text">¿Cómo calificarías la usabilidad de la plataforma de KasHIO?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Difícil</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Muy intuitiva</span></div>
+    <div class="scale-wrap" id="sc-q20"></div>
+    <div class="scale-hint"><span>Muy difícil de usar</span><span>Muy intuitiva</span></div>
+    <div class="sel-label" id="sl-q20"></div>
+    <div class="fb-wrap" id="fb-q20">
+      <label class="c-label">¿Qué mejorarías de la usabilidad? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q20" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 2</div>
+    <h2 class="q-text">¿Hay alguna funcionalidad que consideras que le falta a la plataforma?</h2>
+    <label class="c-label">Tu respuesta <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+    <textarea id="ta-q21" placeholder="Ej: Me gustaría poder exportar reportes en Excel..."></textarea>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goPrev(7)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n7" onclick="enviar()" disabled>Enviar respuestas</button>
+  </div>
+</div>
+
+<!-- SENDING -->
+<div class="sending" id="sending">
+  <div class="spinner"></div>
+  <p style="font-size:14px;font-weight:600;color:var(--muted);">Enviando respuestas&hellip;</p>
+</div>
+
+<!-- THANK YOU -->
+<div class="step" id="s8">
+  <div class="ty">
+    <div class="ty-icon">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0E6B42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+    </div>
+    <p class="ty-title">Respuesta registrada</p>
+    <p class="ty-sub">Gracias por compartir tu experiencia de onboarding. Tu feedback nos ayuda a mejorar el proceso de integración.</p>
+  </div>
+</div>
+
+</div>
+</main>
+<footer class="footer">KasHIO &copy; 2026 &nbsp;&middot;&nbsp; Encuesta de satisfacción</footer>
+
+<script>
+const SHEETS_URL="https://script.google.com/macros/s/AKfycbwv0cgeSAnaII2XSU7A8C5FlXa4e16fe5lwpB0_Yh_wr_NTGah49k4D64dgguBcYvQ4Rg/exec";
+const TIPO="onboarding";
+const urlP=new URLSearchParams(window.location.search);
+let clienteParam=urlP.get("cliente")||"";
+let producto="";
+const ans={};
+
+function cat(v){
+  if(v<=5)return{cls:"sd",label:"Bajo"};
+  if(v<=7)return{cls:"sp",label:"Aceptable"};
+  return{cls:"sr",label:"Alto"};
+}
+
+function buildScale(scId,qKey,fbId,cb){
+  const wrap=document.getElementById(scId);
+  if(!wrap)return;
+  for(let i=1;i<=10;i++){
+    const b=document.createElement("button");
+    b.className="scale-btn";
+    b.textContent=i;
+    b.onclick=()=>{
+      wrap.querySelectorAll(".scale-btn").forEach(x=>x.className="scale-btn");
+      b.className="scale-btn "+cat(i).cls;
+      ans[qKey]=i;
+      const sl=document.getElementById("sl-"+qKey);
+      if(sl){sl.textContent=i+" de 10 — "+cat(i).label;sl.className="sel-label rated";}
+      const fw=document.getElementById(fbId);
+      if(fw){
+        if(i<=5){fw.style.display="block";fw.classList.add("visible");}
+        else{fw.style.display="none";fw.classList.remove("visible");}
+      }
+      if(cb)cb();
+    };
+    wrap.appendChild(b);
+  }
+}
+
+function allAns(keys){return keys.every(k=>ans[k]!==undefined);}
+function chk(btnId,keys){document.getElementById(btnId).disabled=!allAns(keys);}
+
+function selProd(p){
+  producto=p;
+  ["payin","payout","ambos"].forEach(x=>document.getElementById("pb-"+x).classList.toggle("selected",x===p));
+  chk0();
+}
+
+function chk0(){
+  const ok=document.getElementById("empresa").value.trim().length>=2&&producto!="";
+  document.getElementById("n0").disabled=!ok;
+}
+
+const eInp=document.getElementById("empresa");
+eInp.addEventListener("input",chk0);
+eInp.addEventListener("blur",()=>{
+  const ok=eInp.value.trim().length>=2;
+  eInp.style.borderColor=ok?"":"#CC2A3A";
+  document.getElementById("emp-err").style.display=ok?"none":"block";
+});
+eInp.addEventListener("keydown",e=>{if(e.key==="Enter"&&eInp.value.trim().length>=2&&producto)goTo(1);});
+
+function totalBlocks(){
+  let n=5; // B1+B2+B3+B4(onboarding)+B7
+  if(producto==="payin"||producto==="ambos")n++;
+  if(producto==="payout"||producto==="ambos")n++;
+  return n;
+}
+
+function blockNum(step){
+  // Steps: 1=B1, 2=B2, 3=B3, 4=B4(onboarding), 5=Payin, 6=Payout, 7=Platform
+  if(step<=4)return step;
+  if(step===5)return 5; // Payin
+  if(step===6){
+    return(producto==="ambos")?6:5;
+  }
+  if(step===7)return totalBlocks();
+  return step;
+}
+
+function updateProg(step){
+  const total=totalBlocks();
+  const bn=blockNum(step);
+  const pct=Math.round(bn/total*100);
+  const pm=document.getElementById("pm"+step);
+  const pf=document.getElementById("pf"+step);
+  if(pm)pm.innerHTML=`<span>Bloque ${bn} de ${total}</span><span>${pct}%</span>`;
+  if(pf)pf.style.width=pct+"%";
+}
+
+function goNext(cur){
+  if(cur===4){
+    if(producto==="payin"||producto==="ambos"){goTo(5);return;}
+    if(producto==="payout"){goTo(6);return;}
+    goTo(7);
+  }else if(cur===5){
+    if(producto==="ambos"){goTo(6);return;}
+    goTo(7);
+  }else{goTo(cur+1);}
+}
+
+function goPrev(cur){
+  if(cur===6){
+    if(producto==="ambos"){goTo(5);return;}
+    goTo(4);
+  }else if(cur===7){
+    if(producto==="payout"||producto==="ambos"){goTo(6);return;}
+    if(producto==="payin"){goTo(5);return;}
+    goTo(4);
+  }else{goTo(cur-1);}
+}
+
+function goTo(n){
+  if(n===1)clienteParam=eInp.value.trim()||clienteParam;
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById("sending").style.display="none";
+  const t=document.getElementById("s"+n);
+  if(t){t.classList.add("active");if(n>=1&&n<=7)updateProg(n);}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function tv(id){const el=document.getElementById(id);return el?el.value.trim():"";}
+
+async function enviar(){
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById("sending").style.display="block";
+  const q3=[tv("ta-q1"),tv("ta-q2")].filter(Boolean).join(" | ");
+  const q6=[tv("ta-q4"),tv("ta-q5")].filter(Boolean).join(" | ");
+  const q10b=[tv("ta-q7"),tv("ta-q8"),tv("ta-q9"),tv("ta-q10b")].filter(Boolean).join(" | ");
+  const q15=[tv("ta-q11"),tv("ta-q12"),tv("ta-q13"),tv("ta-q15")].filter(Boolean).join(" | ");
+  const q21=[tv("ta-q20"),tv("ta-q21")].filter(Boolean).join(" | ");
+  const payload={
+    tipo:TIPO,cliente:clienteParam||"Anónimo",productos:producto,
+    fecha:new Date().toLocaleString("es-PE"),
+    q1:ans.q1??"",q2:ans.q2??"",q3,
+    q4:ans.q4??"",q5:ans.q5??"",q6,
+    q7:ans.q7??"",q8:ans.q8??"",q9:ans.q9??"",q10:ans.q10??"",q10b,
+    q11:ans.q11??"",q12:ans.q12??"",q13:ans.q13??"",q14:ans.q14??"",q15,
+    q16:ans.q16??"",q17:ans.q17??"",
+    q18:ans.q18??"",q19:ans.q19??"",
+    q20:ans.q20??"",q21
+  };
+  try{await fetch(SHEETS_URL+"?"+new URLSearchParams(payload).toString(),{method:"GET",mode:"no-cors"});}catch(e){}
+  document.getElementById("sending").style.display="none";
+  goTo(8);
+}
+
+buildScale("sc-q1","q1","fb-q1",()=>chk("n1",["q1","q2"]));
+buildScale("sc-q2","q2","fb-q2",()=>chk("n1",["q1","q2"]));
+buildScale("sc-q4","q4","fb-q4",()=>chk("n2",["q4","q5"]));
+buildScale("sc-q5","q5","fb-q5",()=>chk("n2",["q4","q5"]));
+buildScale("sc-q7","q7","fb-q7",()=>chk("n3",["q7","q8","q9","q10"]));
+buildScale("sc-q8","q8","fb-q8",()=>chk("n3",["q7","q8","q9","q10"]));
+buildScale("sc-q9","q9","fb-q9",()=>chk("n3",["q7","q8","q9","q10"]));
+buildScale("sc-q10","q10","fb-q10",()=>chk("n3",["q7","q8","q9","q10"]));
+buildScale("sc-q11","q11","fb-q11",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q12","q12","fb-q12",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q13","q13","fb-q13",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q14","q14","fb-q14",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q16","q16",null,()=>chk("n5",["q16","q17"]));
+buildScale("sc-q17","q17",null,()=>chk("n5",["q16","q17"]));
+buildScale("sc-q18","q18",null,()=>chk("n6",["q18","q19"]));
+buildScale("sc-q19","q19",null,()=>chk("n6",["q18","q19"]));
+buildScale("sc-q20","q20","fb-q20",()=>chk("n7",["q20"]));
+</script>
+</body>
+</html>

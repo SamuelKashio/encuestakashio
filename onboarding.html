@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Encuesta de Satisfacción — KasHIO</title>
+<title>Encuesta de Onboarding — KasHIO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -94,12 +94,12 @@ textarea::placeholder{color:#C0C8D8;}
     <div style="position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:rgba(255,255,255,.06);border-radius:50%;"></div>
     <div style="position:absolute;bottom:-70px;left:-40px;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
     <div style="width:52px;height:52px;background:rgba(255,255,255,.15);border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
     </div>
-    <h2 style="font-size:21px;font-weight:900;color:white;margin-bottom:8px;letter-spacing:-.3px;line-height:1.3;">Encuesta de satisfacción</h2>
-    <p style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.65;max-width:360px;">Tu opinión nos permite mejorar continuamente el servicio. El proceso toma aproximadamente <strong style="color:white;">5 minutos.</strong></p>
+    <h2 style="font-size:21px;font-weight:900;color:white;margin-bottom:8px;letter-spacing:-.3px;line-height:1.3;">Encuesta de onboarding</h2>
+    <p style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.65;max-width:360px;">Tu feedback sobre el proceso de integración nos permite mejorar continuamente. El proceso toma aproximadamente <strong style="color:white;">7 minutos.</strong></p>
     <div style="display:flex;gap:8px;margin-top:1.5rem;flex-wrap:wrap;">
-      <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.95);font-size:11px;font-weight:700;padding:5px 13px;border-radius:6px;">6 bloques</span>
+      <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.95);font-size:11px;font-weight:700;padding:5px 13px;border-radius:6px;">7 bloques</span>
       <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.95);font-size:11px;font-weight:700;padding:5px 13px;border-radius:6px;">Escala 1 a 10</span>
     </div>
   </div>
@@ -108,7 +108,7 @@ textarea::placeholder{color:#C0C8D8;}
   <input class="inp" id="empresa" type="text" placeholder="Ej: Empresa ABC S.A.C." autocomplete="organization"/>
   <p id="emp-err" style="font-size:12px;color:#CC2A3A;font-weight:600;margin-top:-12px;margin-bottom:16px;display:none;">Este campo es obligatorio.</p>
 
-  <label class="inp-label">¿Qué producto(s) de KasHIO utilizas? <span style="color:#CC2A3A">*</span></label>
+  <label class="inp-label">¿Qué producto(s) de KasHIO integraste? <span style="color:#CC2A3A">*</span></label>
   <div class="prod-wrap">
     <button class="prod-btn" id="pb-payin" onclick="selProd('payin')">Payin<span class="prod-sub">Recaudos</span></button>
     <button class="prod-btn" id="pb-payout" onclick="selProd('payout')">Payout<span class="prod-sub">Dispersión</span></button>
@@ -122,8 +122,8 @@ textarea::placeholder{color:#C0C8D8;}
 
 <!-- STEP 1: Bloque 1 - Corporativo -->
 <div class="step" id="s1">
-  <div class="prog-meta" id="pm1"><span>Bloque 1 de 6</span><span>17%</span></div>
-  <div class="prog-track"><div class="prog-fill" id="pf1" style="width:17%"></div></div>
+  <div class="prog-meta" id="pm1"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf1"></div></div>
   <div class="block-badge">Bloque 1 &mdash; Corporativo</div>
 
   <div class="q-block">
@@ -160,8 +160,8 @@ textarea::placeholder{color:#C0C8D8;}
 
 <!-- STEP 2: Bloque 2 - Equipo Comercial -->
 <div class="step" id="s2">
-  <div class="prog-meta" id="pm2"><span>Bloque 2 de 6</span><span>33%</span></div>
-  <div class="prog-track"><div class="prog-fill" id="pf2" style="width:33%"></div></div>
+  <div class="prog-meta" id="pm2"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf2"></div></div>
   <div class="block-badge">Bloque 2 &mdash; Equipo Comercial</div>
 
   <div class="q-block">
@@ -198,8 +198,8 @@ textarea::placeholder{color:#C0C8D8;}
 
 <!-- STEP 3: Bloque 3 - Customer Support -->
 <div class="step" id="s3">
-  <div class="prog-meta" id="pm3"><span>Bloque 3 de 6</span><span>50%</span></div>
-  <div class="prog-track"><div class="prog-fill" id="pf3" style="width:50%"></div></div>
+  <div class="prog-meta" id="pm3"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf3"></div></div>
   <div class="block-badge">Bloque 3 &mdash; Customer Support</div>
 
   <div class="q-block">
@@ -256,14 +256,78 @@ textarea::placeholder{color:#C0C8D8;}
 
   <div class="nav">
     <button class="btn" onclick="goTo(2)">&larr; Atrás</button>
-    <button class="btn btn-p" id="n3" onclick="goNext(3)" disabled>Siguiente &rarr;</button>
+    <button class="btn btn-p" id="n3" onclick="goTo(4)" disabled>Siguiente &rarr;</button>
   </div>
 </div>
 
-<!-- STEP 4: Bloque Payin -->
+<!-- STEP 4: Bloque 4 - Onboarding -->
 <div class="step" id="s4">
   <div class="prog-meta" id="pm4"></div>
   <div class="prog-track"><div class="prog-fill" id="pf4"></div></div>
+  <div class="block-badge">Bloque 4 &mdash; Proceso de Onboarding</div>
+
+  <div class="q-block">
+    <div class="q-num">Pregunta 1 de 4</div>
+    <h2 class="q-text">¿Qué tan fácil fue el proceso de integración con KasHIO?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Difícil</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Muy fácil</span></div>
+    <div class="scale-wrap" id="sc-q11"></div>
+    <div class="scale-hint"><span>Muy difícil</span><span>Muy fácil</span></div>
+    <div class="sel-label" id="sl-q11"></div>
+    <div class="fb-wrap" id="fb-q11">
+      <label class="c-label">¿Qué mejorarías del proceso? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q11" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 2 de 4</div>
+    <h2 class="q-text">¿Cómo calificarías el acompañamiento durante el proceso de onboarding?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Deficiente</span><span class="pill pp">6&ndash;7 &nbsp;Bueno</span><span class="pill pr">8&ndash;10 &nbsp;Excelente</span></div>
+    <div class="scale-wrap" id="sc-q12"></div>
+    <div class="scale-hint"><span>Muy deficiente</span><span>Excelente</span></div>
+    <div class="sel-label" id="sl-q12"></div>
+    <div class="fb-wrap" id="fb-q12">
+      <label class="c-label">¿Qué mejorarías del acompañamiento? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q12" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 3 de 4</div>
+    <h2 class="q-text">¿La documentación proporcionada fue suficiente y clara?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Insuficiente</span><span class="pill pp">6&ndash;7 &nbsp;Regular</span><span class="pill pr">8&ndash;10 &nbsp;Muy completa</span></div>
+    <div class="scale-wrap" id="sc-q13"></div>
+    <div class="scale-hint"><span>Muy insuficiente</span><span>Muy completa</span></div>
+    <div class="sel-label" id="sl-q13"></div>
+    <div class="fb-wrap" id="fb-q13">
+      <label class="c-label">¿Qué mejorarías de la documentación? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q13" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+  <div class="q-divider"></div>
+  <div class="q-block">
+    <div class="q-num">Pregunta 4 de 4</div>
+    <h2 class="q-text">¿El tiempo del proceso de onboarding fue el adecuado?</h2>
+    <div class="legend"><span class="pill pd">1&ndash;5 &nbsp;Demasiado largo</span><span class="pill pp">6&ndash;7 &nbsp;Aceptable</span><span class="pill pr">8&ndash;10 &nbsp;Muy adecuado</span></div>
+    <div class="scale-wrap" id="sc-q14"></div>
+    <div class="scale-hint"><span>Demasiado largo</span><span>Muy adecuado</span></div>
+    <div class="sel-label" id="sl-q14"></div>
+    <div class="fb-wrap" id="fb-q14">
+      <label class="c-label">¿Qué podría mejorar del proceso de onboarding? <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></label>
+      <textarea id="ta-q15" placeholder="Cuéntanos más..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(3)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n4" onclick="goNext(4)" disabled>Siguiente &rarr;</button>
+  </div>
+</div>
+
+<!-- STEP 5: Bloque Payin -->
+<div class="step" id="s5">
+  <div class="prog-meta" id="pm5"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf5"></div></div>
   <div class="block-badge">Payin &mdash; Recaudos</div>
 
   <div class="q-block">
@@ -285,15 +349,15 @@ textarea::placeholder{color:#C0C8D8;}
   </div>
 
   <div class="nav">
-    <button class="btn" onclick="goTo(3)">&larr; Atrás</button>
-    <button class="btn btn-p" id="n4" onclick="goNext(4)" disabled>Siguiente &rarr;</button>
+    <button class="btn" onclick="goTo(4)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n5" onclick="goNext(5)" disabled>Siguiente &rarr;</button>
   </div>
 </div>
 
-<!-- STEP 5: Bloque Payout -->
-<div class="step" id="s5">
-  <div class="prog-meta" id="pm5"></div>
-  <div class="prog-track"><div class="prog-fill" id="pf5"></div></div>
+<!-- STEP 6: Bloque Payout -->
+<div class="step" id="s6">
+  <div class="prog-meta" id="pm6"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf6"></div></div>
   <div class="block-badge">Payout &mdash; Dispersión</div>
 
   <div class="q-block">
@@ -315,15 +379,15 @@ textarea::placeholder{color:#C0C8D8;}
   </div>
 
   <div class="nav">
-    <button class="btn" onclick="goPrev(5)">&larr; Atrás</button>
-    <button class="btn btn-p" id="n5" onclick="goTo(6)" disabled>Siguiente &rarr;</button>
+    <button class="btn" onclick="goPrev(6)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n6" onclick="goTo(7)" disabled>Siguiente &rarr;</button>
   </div>
 </div>
 
-<!-- STEP 6: Bloque 7 - Plataforma -->
-<div class="step" id="s6">
-  <div class="prog-meta" id="pm6"></div>
-  <div class="prog-track"><div class="prog-fill" id="pf6"></div></div>
+<!-- STEP 7: Plataforma -->
+<div class="step" id="s7">
+  <div class="prog-meta" id="pm7"></div>
+  <div class="prog-track"><div class="prog-fill" id="pf7"></div></div>
   <div class="block-badge">Plataforma</div>
 
   <div class="q-block">
@@ -347,8 +411,8 @@ textarea::placeholder{color:#C0C8D8;}
   </div>
 
   <div class="nav">
-    <button class="btn" onclick="goPrev(6)">&larr; Atrás</button>
-    <button class="btn btn-p" id="n6" onclick="enviar()" disabled>Enviar respuestas</button>
+    <button class="btn" onclick="goPrev(7)">&larr; Atrás</button>
+    <button class="btn btn-p" id="n7" onclick="enviar()" disabled>Enviar respuestas</button>
   </div>
 </div>
 
@@ -359,13 +423,13 @@ textarea::placeholder{color:#C0C8D8;}
 </div>
 
 <!-- THANK YOU -->
-<div class="step" id="s7">
+<div class="step" id="s8">
   <div class="ty">
     <div class="ty-icon">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0E6B42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
     </div>
     <p class="ty-title">Respuesta registrada</p>
-    <p class="ty-sub">Gracias por compartir tu experiencia. Tu opinión contribuye directamente a la mejora continua del servicio de KasHIO.</p>
+    <p class="ty-sub">Gracias por compartir tu experiencia de onboarding. Tu feedback nos ayuda a mejorar el proceso de integración.</p>
   </div>
 </div>
 
@@ -375,7 +439,7 @@ textarea::placeholder{color:#C0C8D8;}
 
 <script>
 const SHEETS_URL="https://script.google.com/macros/s/AKfycbwv0cgeSAnaII2XSU7A8C5FlXa4e16fe5lwpB0_Yh_wr_NTGah49k4D64dgguBcYvQ4Rg/exec";
-const TIPO="recurrente";
+const TIPO="onboarding";
 const urlP=new URLSearchParams(window.location.search);
 let clienteParam=urlP.get("cliente")||"";
 let producto="";
@@ -412,10 +476,8 @@ function buildScale(scId,qKey,fbId,cb){
 }
 
 function allAns(keys){return keys.every(k=>ans[k]!==undefined);}
-
 function chk(btnId,keys){document.getElementById(btnId).disabled=!allAns(keys);}
 
-/* Product */
 function selProd(p){
   producto=p;
   ["payin","payout","ambos"].forEach(x=>document.getElementById("pb-"+x).classList.toggle("selected",x===p));
@@ -436,25 +498,21 @@ eInp.addEventListener("blur",()=>{
 });
 eInp.addEventListener("keydown",e=>{if(e.key==="Enter"&&eInp.value.trim().length>=2&&producto)goTo(1);});
 
-/* Navigation */
 function totalBlocks(){
-  let n=4;
+  let n=5; // B1+B2+B3+B4(onboarding)+B7
   if(producto==="payin"||producto==="ambos")n++;
   if(producto==="payout"||producto==="ambos")n++;
   return n;
 }
 
 function blockNum(step){
-  if(step<=3)return step;
-  if(step===4){
-    if(producto==="payin"||producto==="ambos")return 4;
-    return 4;
+  // Steps: 1=B1, 2=B2, 3=B3, 4=B4(onboarding), 5=Payin, 6=Payout, 7=Platform
+  if(step<=4)return step;
+  if(step===5)return 5; // Payin
+  if(step===6){
+    return(producto==="ambos")?6:5;
   }
-  if(step===5){
-    if(producto==="ambos")return 5;
-    return 4;
-  }
-  if(step===6)return totalBlocks();
+  if(step===7)return totalBlocks();
   return step;
 }
 
@@ -469,24 +527,24 @@ function updateProg(step){
 }
 
 function goNext(cur){
-  if(cur===3){
-    if(producto==="payin"||producto==="ambos"){goTo(4);return;}
-    if(producto==="payout"){goTo(5);return;}
-    goTo(6);
-  }else if(cur===4){
-    if(producto==="ambos"){goTo(5);return;}
-    goTo(6);
+  if(cur===4){
+    if(producto==="payin"||producto==="ambos"){goTo(5);return;}
+    if(producto==="payout"){goTo(6);return;}
+    goTo(7);
+  }else if(cur===5){
+    if(producto==="ambos"){goTo(6);return;}
+    goTo(7);
   }else{goTo(cur+1);}
 }
 
 function goPrev(cur){
-  if(cur===5){
-    if(producto==="ambos"){goTo(4);return;}
-    goTo(3);
-  }else if(cur===6){
-    if(producto==="payout"||producto==="ambos"){goTo(5);return;}
-    if(producto==="payin"){goTo(4);return;}
-    goTo(3);
+  if(cur===6){
+    if(producto==="ambos"){goTo(5);return;}
+    goTo(4);
+  }else if(cur===7){
+    if(producto==="payout"||producto==="ambos"){goTo(6);return;}
+    if(producto==="payin"){goTo(5);return;}
+    goTo(4);
   }else{goTo(cur-1);}
 }
 
@@ -495,7 +553,7 @@ function goTo(n){
   document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
   document.getElementById("sending").style.display="none";
   const t=document.getElementById("s"+n);
-  if(t){t.classList.add("active");if(n>=1&&n<=6)updateProg(n);}
+  if(t){t.classList.add("active");if(n>=1&&n<=7)updateProg(n);}
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -507,6 +565,7 @@ async function enviar(){
   const q3=[tv("ta-q1"),tv("ta-q2")].filter(Boolean).join(" | ");
   const q6=[tv("ta-q4"),tv("ta-q5")].filter(Boolean).join(" | ");
   const q10b=[tv("ta-q7"),tv("ta-q8"),tv("ta-q9"),tv("ta-q10b")].filter(Boolean).join(" | ");
+  const q15=[tv("ta-q11"),tv("ta-q12"),tv("ta-q13"),tv("ta-q15")].filter(Boolean).join(" | ");
   const q21=[tv("ta-q20"),tv("ta-q21")].filter(Boolean).join(" | ");
   const payload={
     tipo:TIPO,cliente:clienteParam||"Anónimo",productos:producto,
@@ -514,17 +573,16 @@ async function enviar(){
     q1:ans.q1??"",q2:ans.q2??"",q3,
     q4:ans.q4??"",q5:ans.q5??"",q6,
     q7:ans.q7??"",q8:ans.q8??"",q9:ans.q9??"",q10:ans.q10??"",q10b,
-    q11:"",q12:"",q13:"",q14:"",q15:"",
+    q11:ans.q11??"",q12:ans.q12??"",q13:ans.q13??"",q14:ans.q14??"",q15,
     q16:ans.q16??"",q17:ans.q17??"",
     q18:ans.q18??"",q19:ans.q19??"",
     q20:ans.q20??"",q21
   };
   try{await fetch(SHEETS_URL+"?"+new URLSearchParams(payload).toString(),{method:"GET",mode:"no-cors"});}catch(e){}
   document.getElementById("sending").style.display="none";
-  goTo(7);
+  goTo(8);
 }
 
-/* Init scales */
 buildScale("sc-q1","q1","fb-q1",()=>chk("n1",["q1","q2"]));
 buildScale("sc-q2","q2","fb-q2",()=>chk("n1",["q1","q2"]));
 buildScale("sc-q4","q4","fb-q4",()=>chk("n2",["q4","q5"]));
@@ -533,11 +591,15 @@ buildScale("sc-q7","q7","fb-q7",()=>chk("n3",["q7","q8","q9","q10"]));
 buildScale("sc-q8","q8","fb-q8",()=>chk("n3",["q7","q8","q9","q10"]));
 buildScale("sc-q9","q9","fb-q9",()=>chk("n3",["q7","q8","q9","q10"]));
 buildScale("sc-q10","q10","fb-q10",()=>chk("n3",["q7","q8","q9","q10"]));
-buildScale("sc-q16","q16",null,()=>chk("n4",["q16","q17"]));
-buildScale("sc-q17","q17",null,()=>chk("n4",["q16","q17"]));
-buildScale("sc-q18","q18",null,()=>chk("n5",["q18","q19"]));
-buildScale("sc-q19","q19",null,()=>chk("n5",["q18","q19"]));
-buildScale("sc-q20","q20","fb-q20",()=>chk("n6",["q20"]));
+buildScale("sc-q11","q11","fb-q11",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q12","q12","fb-q12",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q13","q13","fb-q13",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q14","q14","fb-q14",()=>chk("n4",["q11","q12","q13","q14"]));
+buildScale("sc-q16","q16",null,()=>chk("n5",["q16","q17"]));
+buildScale("sc-q17","q17",null,()=>chk("n5",["q16","q17"]));
+buildScale("sc-q18","q18",null,()=>chk("n6",["q18","q19"]));
+buildScale("sc-q19","q19",null,()=>chk("n6",["q18","q19"]));
+buildScale("sc-q20","q20","fb-q20",()=>chk("n7",["q20"]));
 </script>
 </body>
 </html>
